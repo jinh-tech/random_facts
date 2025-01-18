@@ -59,7 +59,9 @@ def create_fact_workflow() -> Graph:
             "topic": state["topic"],
             "facts": state["facts"],
             "is_random": state["is_random"],
-            "audio_filepath": updated_state["audio_filepath"]
+            "audio_filepath": updated_state["audio_filepath"],
+            "audio_duration": state["audio_duration"],
+            "synthesis_durations": state["synthesis_durations"],
         }
         with open(f"{thread_dir}/result.json", "w") as f:
             json.dump(state_to_save, f, indent=2)

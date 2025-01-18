@@ -14,17 +14,19 @@ LMNT_API_KEY = os.environ.get('LMNT_API_KEY')
 
 
 async def generate_audio_file(text_to_synthetize, output_filepth='output.wav'):
-  async with Speech(LMNT_API_KEY) as speech:
-    synthesis = await speech.synthesize(
-      text_to_synthetize, 
-      voice='lily', 
-      format='wav', 
-      return_durations=True
-    )
-    with open(output_filepth, 'wb') as f:
-      f.write(synthesis['audio'])
-    return synthesis['duration']
+    async with Speech(LMNT_API_KEY) as speech:
+        synthesis = await speech.synthesize(
+            text_to_synthetize, 
+            voice='lily', 
+            format='wav', 
+            return_durations=True
+        )
+        with open(output_filepth, 'wb') as f:
+            f.write(synthesis['audio'])
 
+        duration = get_audio_duration(output_filepth)
+            
+        return duration, synthesis['durations']
 
 def generate_audio_file_sync(text_to_synthesize, output_filepath='output.wav'):
     """
@@ -49,22 +51,39 @@ def generate_audio_and_update_state(text, state, output_filepath='output.wav'):
         dict: Updated state dictionary with audio_filepath and duration
     """
     try:
-        duration = generate_audio_file_sync(text, output_filepath)
+        duration, synthesis_durations = generate_audio_file_sync(text, output_filepath)
         state['audio_filepath'] = output_filepath
         state['audio_duration'] = duration
+        state['synthesis_durations'] = synthesis_durations
         return state
     except Exception as e:
         print(f"Error generating audio: {str(e)}")
         state['audio_filepath'] = None
         state['audio_duration'] = None
+        state['synthesis_durations'] = None
         return state
+
+def get_audio_duration(audio_filepath):
+    """
+    Gets the duration of a WAV audio file in seconds.
+    
+    Args:
+        audio_filepath (str): Path to the WAV file
+        
+    Returns:
+        float: Duration of the audio in seconds
+    """
+    with wave.open(audio_filepath, 'rb') as wav_file:
+        frames = wav_file.getnframes()
+        rate = wav_file.getframerate()
+        duration = frames / float(rate)
+        return duration
 
 if __name__ == '__main__':
 
     text_to_synthetize='''
-        Swimming Marathon Champions: Elephants are not only excellent swimmers 
-        but can swim for an astonishing six hours straight! 
-        Some have even been recorded traveling around 48 kilometers at a speed of 2.1 kilometers per hour.'''
+        Swimming Marathon Champions: Elephants are not only excellent swimmers '''
 
-    generate_audio_file_sync(text_to_synthetize)
+    duration = generate_audio_file_sync(text_to_synthetize)
 
+    print(duration)
