@@ -1,0 +1,420 @@
+{
+  "thread_id": "570a14e4-ac8f-492c-accb-ef7882ad783d",
+  "topic": "astronomy",
+  "facts": "Did you know that our universe started as a cosmic hotdog stand, selling just hydrogen, helium, and a dash of lithium? And now, thanks to astronomers, we've upgraded to a gourmet menu with elements as diverse as gold and uranium!",
+  "is_random": true,
+  "audio_filepath": "output/570a14e4-ac8f-492c-accb-ef7882ad783d/output.wav",
+  "audio_duration": 15.17,
+  "synthesis_durations": [
+    {
+      "text": "",
+      "duration": 0.05,
+      "start": 0.0
+    },
+    {
+      "text": "Did",
+      "duration": 0.16,
+      "start": 0.05
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 0.21000000000000002
+    },
+    {
+      "text": "you",
+      "duration": 0.12,
+      "start": 0.21000000000000002
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 0.33
+    },
+    {
+      "text": "know",
+      "duration": 0.37,
+      "start": 0.33
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 0.7
+    },
+    {
+      "text": "that",
+      "duration": 0.14,
+      "start": 0.7
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 0.84
+    },
+    {
+      "text": "our",
+      "duration": 0.13,
+      "start": 0.84
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 0.97
+    },
+    {
+      "text": "universe",
+      "duration": 0.51,
+      "start": 0.97
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 1.48
+    },
+    {
+      "text": "started",
+      "duration": 0.48,
+      "start": 1.48
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 1.96
+    },
+    {
+      "text": "as",
+      "duration": 0.18,
+      "start": 1.96
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 2.14
+    },
+    {
+      "text": "a",
+      "duration": 0.06,
+      "start": 2.14
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 2.2
+    },
+    {
+      "text": "cosmic",
+      "duration": 0.53,
+      "start": 2.2
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 2.7300000000000004
+    },
+    {
+      "text": "hotdog",
+      "duration": 0.43,
+      "start": 2.7300000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 3.1600000000000006
+    },
+    {
+      "text": "stand",
+      "duration": 0.53,
+      "start": 3.1600000000000006
+    },
+    {
+      "text": ", ",
+      "duration": 0.28,
+      "start": 3.6900000000000004
+    },
+    {
+      "text": "selling",
+      "duration": 0.45,
+      "start": 3.9700000000000006
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 4.420000000000001
+    },
+    {
+      "text": "just",
+      "duration": 0.26,
+      "start": 4.420000000000001
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 4.680000000000001
+    },
+    {
+      "text": "hydrogen",
+      "duration": 0.59,
+      "start": 4.680000000000001
+    },
+    {
+      "text": ", ",
+      "duration": 0.18,
+      "start": 5.2700000000000005
+    },
+    {
+      "text": "helium",
+      "duration": 0.61,
+      "start": 5.45
+    },
+    {
+      "text": ", ",
+      "duration": 0.26,
+      "start": 6.0600000000000005
+    },
+    {
+      "text": "and",
+      "duration": 0.13,
+      "start": 6.32
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 6.45
+    },
+    {
+      "text": "a",
+      "duration": 0.06,
+      "start": 6.45
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 6.51
+    },
+    {
+      "text": "dash",
+      "duration": 0.36,
+      "start": 6.51
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 6.87
+    },
+    {
+      "text": "of",
+      "duration": 0.12,
+      "start": 6.87
+    },
+    {
+      "text": " ",
+      "duration": 0.0,
+      "start": 6.99
+    },
+    {
+      "text": "lithium",
+      "duration": 0.54,
+      "start": 6.99
+    },
+    {
+      "text": "? ",
+      "duration": 0.09,
+      "start": 7.53
+    },
+    {
+      "text": "And",
+      "duration": 0.07,
+      "start": 7.62
+    },
+    {
+      "text": " ",
+      "duration": 0.03,
+      "start": 7.69
+    },
+    {
+      "text": "now",
+      "duration": 0.64,
+      "start": 7.720000000000001
+    },
+    {
+      "text": ", ",
+      "duration": 0.04,
+      "start": 8.360000000000001
+    },
+    {
+      "text": "thanks",
+      "duration": 0.23,
+      "start": 8.4
+    },
+    {
+      "text": " ",
+      "duration": 0.07,
+      "start": 8.63
+    },
+    {
+      "text": "to",
+      "duration": 0.05,
+      "start": 8.700000000000001
+    },
+    {
+      "text": " ",
+      "duration": 0.06,
+      "start": 8.750000000000002
+    },
+    {
+      "text": "astronomers",
+      "duration": 1.01,
+      "start": 8.810000000000002
+    },
+    {
+      "text": ", ",
+      "duration": 0.06,
+      "start": 9.820000000000002
+    },
+    {
+      "text": "we've",
+      "duration": 0.17,
+      "start": 9.880000000000003
+    },
+    {
+      "text": " ",
+      "duration": 0.11,
+      "start": 10.050000000000002
+    },
+    {
+      "text": "upgraded",
+      "duration": 0.46,
+      "start": 10.160000000000002
+    },
+    {
+      "text": " ",
+      "duration": 0.07,
+      "start": 10.620000000000003
+    },
+    {
+      "text": "to",
+      "duration": 0.07,
+      "start": 10.690000000000003
+    },
+    {
+      "text": " ",
+      "duration": 0.07,
+      "start": 10.760000000000003
+    },
+    {
+      "text": "a",
+      "duration": 0.0,
+      "start": 10.830000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.1,
+      "start": 10.830000000000004
+    },
+    {
+      "text": "gourmet",
+      "duration": 0.32,
+      "start": 10.930000000000003
+    },
+    {
+      "text": " ",
+      "duration": 0.08,
+      "start": 11.250000000000004
+    },
+    {
+      "text": "menu",
+      "duration": 0.36,
+      "start": 11.330000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.08,
+      "start": 11.690000000000003
+    },
+    {
+      "text": "with",
+      "duration": 0.15,
+      "start": 11.770000000000003
+    },
+    {
+      "text": " ",
+      "duration": 0.08,
+      "start": 11.920000000000003
+    },
+    {
+      "text": "elements",
+      "duration": 0.61,
+      "start": 12.000000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.13,
+      "start": 12.610000000000003
+    },
+    {
+      "text": "as",
+      "duration": 0.07,
+      "start": 12.740000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.06,
+      "start": 12.810000000000004
+    },
+    {
+      "text": "diverse",
+      "duration": 0.46,
+      "start": 12.870000000000005
+    },
+    {
+      "text": " ",
+      "duration": 0.12,
+      "start": 13.330000000000005
+    },
+    {
+      "text": "as",
+      "duration": 0.09,
+      "start": 13.450000000000005
+    },
+    {
+      "text": " ",
+      "duration": 0.08,
+      "start": 13.540000000000004
+    },
+    {
+      "text": "gold",
+      "duration": 0.28,
+      "start": 13.620000000000005
+    },
+    {
+      "text": " ",
+      "duration": 0.06,
+      "start": 13.900000000000004
+    },
+    {
+      "text": "and",
+      "duration": 0.07,
+      "start": 13.960000000000004
+    },
+    {
+      "text": " ",
+      "duration": 0.03,
+      "start": 14.030000000000005
+    },
+    {
+      "text": "uranium",
+      "duration": 0.61,
+      "start": 14.060000000000004
+    },
+    {
+      "text": "!",
+      "duration": 0.0,
+      "start": 14.670000000000003
+    },
+    {
+      "text": "",
+      "duration": 0.0,
+      "start": 14.670000000000003
+    }
+  ]
+}

@@ -1,3 +1,9 @@
+*.jpeg
+*.jpg
+*.zip
+*.mp4
+*.wav
+
 # Python
 __pycache__/
 *.py[cod]
