@@ -1863,6 +1863,21 @@ compression = ["zstandard (>=0.23.0,<0.24.0)"]
 langsmith-pyo3 = ["langsmith-pyo3 (>=0.1.0rc2,<0.2.0)"]
 
 [[package]]
+name = "lmnt"
+version = "1.1.7"
+description = "Python client library for the LMNT API"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "lmnt-1.1.7-py3-none-any.whl", hash = "sha256:66aaa4c5f2349c40a27c015573bbe579a6df19a1d3fa089745dc4306b4c043af"},
+    {file = "lmnt-1.1.7.tar.gz", hash = "sha256:1092e8e6e4fd8dea90aa7d60312bca04d2f6ea210d681b430e156b6fe367a085"},
+]
+
+[package.dependencies]
+aiohttp = ">=3.8,<4.0"
+
+[[package]]
 name = "markupsafe"
 version = "3.0.2"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -4519,6 +4534,18 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "wave"
+version = "0.0.2"
+description = "Whole Architecture Verification"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "Wave-0.0.2.tar.gz", hash = "sha256:5a895bb85e04e38c82dba90d66a5ae8f488b50c58f3fc4df868a5bcdcabb8632"},
+    {file = "Wave-0.0.2.zip", hash = "sha256:5187f49497287d218cc83d4cd1e5299dc31485ab3ed32abbaa9e95d8f73c4095"},
+]
+
+[[package]]
 name = "wcwidth"
 version = "0.2.13"
 description = "Measures the displayed width of unicode strings in a terminal"
@@ -4691,4 +4718,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "1f1ce496782da1b0f274743c680a1dfe340dcd2dbd44c03a4c1137bc1e8a3c2f"
+content-hash = "1bc68bb014c682fb3707efedb9b0594440c9b8931075410f94ced288c861fafd"
