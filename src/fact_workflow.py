@@ -57,7 +57,7 @@ def create_fact_workflow() -> Graph:
     def generate_audio(state: Dict) -> WorkflowState:
         """Generate audio from the facts and save results"""
         # Create thread directory
-        thread_dir = f"output/{state['thread_id']}"
+        thread_dir = f"../data/output/{state['thread_id']}"
         os.makedirs(thread_dir, exist_ok=True)
         
         # Generate audio with updated path
@@ -141,7 +141,7 @@ def create_fact_workflow() -> Graph:
     
     def generate_image(state: Dict) -> WorkflowState:
         """Generate two images based on the refined text-to-image prompts"""
-        thread_dir = f"output/{state['thread_id']}"
+        thread_dir = f"../data/output/{state['thread_id']}"
         
         image_filepaths = []
         for idx, prompt in enumerate(state["txt2img_prompts"]):
@@ -149,7 +149,7 @@ def create_fact_workflow() -> Graph:
             
             image_result = image_chain.invoke({
                 "prompt": prompt,
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "9:16",
                 "output_filepath": output_filepath
             })
             
@@ -162,7 +162,7 @@ def create_fact_workflow() -> Graph:
     
     def save_state(state: Dict) -> WorkflowState:
         """Save the final state as JSON"""
-        thread_dir = f"output/{state['thread_id']}"
+        thread_dir = f"../data/output/{state['thread_id']}"
         
         # Save state as JSON
         state_to_save = {

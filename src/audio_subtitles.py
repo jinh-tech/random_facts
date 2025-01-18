@@ -22,7 +22,7 @@ def add_subtitle_to_video(video_file_path, subtitle_file_path, output_file_path)
     video_subtiles = [ 
         TextClip(FONT, 
                 text=sub_data['text'], 
-                font_size=24, 
+                font_size=72, 
                 color='white', 
                 duration=sub_data['duration'], 
                 method='label',
