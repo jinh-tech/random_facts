@@ -9,6 +9,7 @@ LMNT_API_KEY=xxx
 SEGMIND_API_KEY=xxx
 ```
 
+`streamlit run src/streamlit_app.py'
 
 
 ## Getting started

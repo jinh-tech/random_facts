@@ -16,6 +16,8 @@ from audio import generate_audio_and_update_state
 from get_images import create_image_generation_chain
 from loguru import logger
 
+from src import OUTPUT_DIR
+
 class WorkflowState(TypedDict):
     thread_id: str
     topic: str
@@ -87,7 +89,7 @@ def create_fact_workflow() -> Graph:
         logger.info('generate_audio...')
 
         # Create thread directory
-        thread_dir = f"../data/output/{state['thread_id']}"
+        thread_dir = f"{OUTPUT_DIR}/{state['thread_id']}"
         os.makedirs(thread_dir, exist_ok=True)
         
         # Generate audio with updated path
@@ -165,7 +167,7 @@ def create_fact_workflow() -> Graph:
 
         logger.info('generate_image...')
 
-        thread_dir = f"../data/output/{state['thread_id']}"
+        thread_dir = f"{OUTPUT_DIR}/{state['thread_id']}"
         
         image_filepaths = []
         for idx, prompt in enumerate(state["txt2img_prompts"]):
@@ -189,7 +191,7 @@ def create_fact_workflow() -> Graph:
 
         logger.info('save_state...')
 
-        thread_dir = f"../data/output/{state['thread_id']}"
+        thread_dir = f"{OUTPUT_DIR}/{state['thread_id']}"
         
         # Save state as JSON
         state_to_save = {

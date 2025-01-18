@@ -30,11 +30,20 @@ def get_workflow():
 
 workflow = get_workflow()
 
-# Create input field
-user_input = st.text_input("Enter a historical topic:", "pepsi vs coca cola war")
 
-if st.button("Generate Video"):
-    with st.spinner("Generating your video... This may take a few minutes."):
+# Text input field
+user_input = st.text_input(
+    "Enter a historical or trending topic (e.g. try 'Pepsi fleet', 'Pinerolo', ...):",
+    key="user_input"
+)
+
+
+
+# Button to generate the video
+if st.button("Generate Video") and user_input:
+    st.write(f"Generating video for: {user_input}")
+    
+    with st.spinner(f"Generating your video about '{user_input}'... This may take 30 seconds."):
 
         # Create a Streamlit placeholder for logs
         log_placeholder = st.empty()
@@ -45,19 +54,15 @@ if st.button("Generate Video"):
 
 
         # Generate thread ID
+        thread_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + user_input
 
-        # thread_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + user_input
-
-        thread_id = '20250118_183003'
-
-        
         # Create the video
         result = workflow.invoke({
             "user_input": user_input,
             "thread_id": thread_id,
         })
 
-        # Set up file paths
+        # # Set up file paths
         output_folder = f"{DATA_DIR}/output/{thread_id}"
         video_file_path = output_folder + "/video.mp4"
         audio_file_path = output_folder + "/output.wav"
@@ -82,4 +87,15 @@ if st.button("Generate Video"):
 
         # Display the final video
         st.success("Video generated successfully!")
+
+        # Display the subtitle JSON content
+        with open(subtitle_file_path) as file:
+            subtitle_data = json.load(file)
+
         st.video(video_with_audio_subtitle_path)
+
+        st.markdown(subtitle_data['description'])
+
+        st.subheader("Intermediate data and prompts")
+        st.json(subtitle_data)
+        
