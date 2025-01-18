@@ -1,5 +1,12 @@
 # random_facts
 
+*.env*
+```
+MISTRAL_API_KEY=xxx
+TAVILY_API_KEY=xxx
+HUGGINGFACE_TOKEN=xxx
+```
+
 
 
 ## Getting started
