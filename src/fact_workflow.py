@@ -5,11 +5,13 @@ from langchain_core.messages import BaseMessage
 # Import our existing components
 from topic_handler import create_topic_chain, TopicOutput
 from langchain_facts import create_fact_chain
+from audio import generate_audio_and_update_state
 
 class WorkflowState(TypedDict):
     topic: str
     facts: str
     is_random: bool
+    audio_filepath: str | None
 
 def create_fact_workflow() -> Graph:
     # Initialize our chains
@@ -33,21 +35,27 @@ def create_fact_workflow() -> Graph:
             "facts": facts_result.content
         }
     
+    def generate_audio(state: Dict) -> WorkflowState:
+        """Generate audio from the facts"""
+        return generate_audio_and_update_state(state["facts"], state)
+    
     # Create the workflow graph
     workflow = Graph()
     
     # Add nodes
     workflow.add_node("process_topic", process_topic)
     workflow.add_node("generate_facts", generate_facts)
+    workflow.add_node("generate_audio", generate_audio)
     
     # Define edges
     workflow.add_edge("process_topic", "generate_facts")
+    workflow.add_edge("generate_facts", "generate_audio")
     
     # Set entry point
     workflow.set_entry_point("process_topic")
     
     # Set the final node
-    workflow.set_finish_point("generate_facts")
+    workflow.set_finish_point("generate_audio")
     
     return workflow.compile()
 
@@ -68,8 +76,10 @@ if __name__ == "__main__":
             "user_input": user_input,
             "topic": "",
             "facts": "",
-            "is_random": False
+            "is_random": False,
+            "audio_filepath": None
         })
         print(f"Topic: {result['topic']} (Random: {result['is_random']})")
         print("Facts:")
-        print(result['facts']) 
+        print(result['facts'])
+        print(f"Audio generated at: {result['audio_filepath']}") 

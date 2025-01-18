@@ -34,6 +34,27 @@ def generate_audio_file_sync(text_to_synthesize, output_filepath='output.wav'):
     
     asyncio.run(wrapper())
 
+def generate_audio_and_update_state(text, state, output_filepath='output.wav'):
+    """
+    Generates audio from text and updates the state dictionary with the audio file path.
+    
+    Args:
+        text (str): Text to synthesize into audio
+        state (dict): State dictionary to update
+        output_filepath (str): Path where the audio file will be saved
+    
+    Returns:
+        dict: Updated state dictionary
+    """
+    try:
+        generate_audio_file_sync(text, output_filepath)
+        state['audio_filepath'] = output_filepath
+        return state
+    except Exception as e:
+        print(f"Error generating audio: {str(e)}")
+        state['audio_filepath'] = None
+        return state
+
 if __name__ == '__main__':
 
     text_to_synthetize='''
