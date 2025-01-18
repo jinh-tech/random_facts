@@ -4,6 +4,21 @@ from video_from_images import video_from_images_moviepy
 from audio_subtitles import join_video_with_audio, add_subtitle_to_video
 import json
 from datetime import datetime
+from src import DATA_DIR
+
+import logging
+from loguru import logger
+
+class StreamlitLogHandler(logging.Handler):
+    def __init__(self, widget_update_func):
+        super().__init__()
+        self.widget_update_func = widget_update_func
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.widget_update_func(msg)
+
+
 
 st.title("Historical Facts Video Generator")
 st.write("Enter a historical topic to generate a video about it!")
@@ -20,8 +35,21 @@ user_input = st.text_input("Enter a historical topic:", "pepsi vs coca cola war"
 
 if st.button("Generate Video"):
     with st.spinner("Generating your video... This may take a few minutes."):
+
+        # Create a Streamlit placeholder for logs
+        log_placeholder = st.empty()
+
+        # Configure loguru to use the Streamlit handler
+        logger.remove()  # Remove default handler
+        logger.add(lambda msg: log_placeholder.code(msg), format="{message}")
+
+
         # Generate thread ID
-        thread_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + user_input
+
+        # thread_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + user_input
+
+        thread_id = '20250118_183003'
+
         
         # Create the video
         result = workflow.invoke({
@@ -30,7 +58,7 @@ if st.button("Generate Video"):
         })
 
         # Set up file paths
-        output_folder = f"../data/output/{thread_id}"
+        output_folder = f"{DATA_DIR}/output/{thread_id}"
         video_file_path = output_folder + "/video.mp4"
         audio_file_path = output_folder + "/output.wav"
         video_with_audio_path = output_folder + '/video_with_audio.mp4'
@@ -41,9 +69,15 @@ if st.button("Generate Video"):
         with open(subtitle_file_path) as file:
             video_duration_sec = json.load(file)["audio_duration"]
 
+        logger.info('video_from_images_moviepy...')
+
         # Generate final video
         video_from_images_moviepy(output_folder, video_file_path, video_duration_sec)
+
+        logger.info('join_video_with_audio...')
         join_video_with_audio(video_file_path, audio_file_path, video_with_audio_path)
+        
+        logger.info('add_subtitle_to_video...')
         add_subtitle_to_video(video_with_audio_path, subtitle_file_path, video_with_audio_subtitle_path)
 
         # Display the final video

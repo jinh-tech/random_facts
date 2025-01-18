@@ -6,12 +6,15 @@ from langgraph.graph import Graph
 from langchain_core.messages import BaseMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_mistralai import ChatMistralAI
+from pydantic import BaseModel, Field
+from langchain.output_parsers import PydanticOutputParser
 
 # Import our existing components
 from topic_handler import create_topic_chain, TopicOutput
 from langchain_facts import create_fact_chain
 from audio import generate_audio_and_update_state
 from get_images import create_image_generation_chain
+from loguru import logger
 
 class WorkflowState(TypedDict):
     thread_id: str
@@ -20,6 +23,24 @@ class WorkflowState(TypedDict):
     is_random: bool
     audio_filepath: str | None
     image_filepath: str | None
+
+class ImagePrompts(BaseModel):
+    prompts: list[str] = Field(
+        description="Two detailed prompts for image generation",
+        min_items=2,
+        max_items=2
+    )
+    
+    model_config = {
+        "json_schema_extra": {
+            "examples": [{
+                "prompts": [
+                    "A majestic elephant standing in morning mist, trunk raised, backlit by golden sunlight",
+                    "Close-up of an elephant's eye showing intricate wrinkles and long eyelashes"
+                ]
+            }]
+        }
+    }
 
 def create_fact_workflow() -> Graph:
     # Initialize our chains
@@ -38,6 +59,9 @@ def create_fact_workflow() -> Graph:
     
     def process_topic(state: Dict) -> WorkflowState:
         """Process the user input to determine the topic"""
+
+        logger.info('process_topic...')
+
         topic_result = topic_chain.invoke({'user_input': state['user_input']})
         return {
             **state,
@@ -47,6 +71,9 @@ def create_fact_workflow() -> Graph:
     
     def generate_facts(state: Dict) -> WorkflowState:
         """Generate facts about the determined topic"""
+
+        logger.info('generate_facts...')
+
         facts_result = facts_chain.invoke(state["topic"])
         return {
             **state,
@@ -56,6 +83,9 @@ def create_fact_workflow() -> Graph:
     
     def generate_audio(state: Dict) -> WorkflowState:
         """Generate audio from the facts and save results"""
+
+        logger.info('generate_audio...')
+
         # Create thread directory
         thread_dir = f"../data/output/{state['thread_id']}"
         os.makedirs(thread_dir, exist_ok=True)
@@ -96,51 +126,45 @@ def create_fact_workflow() -> Graph:
     
     def create_txt2img_prompt(state: Dict) -> WorkflowState:
         """Generate two thematically related text-to-image prompts"""
-        base_prompt = (
-            "Create two different prompts for image generation that illustrate these facts:\n"
-            f"{state['viral_fact'][:200]}...\n\n"
-            "Requirements:\n"
-            "- Each prompt should be a single detailed sentence\n"
-            "- Prompts should be thematically related but visually distinct\n"
-            "- Include specific visual elements and composition details\n"
-            "- Maintain educational value while being visually engaging\n"
-            "- Consider lighting, mood, and perspective\n\n"
-            "Output the prompts in this exact JSON format:\n"
-            "{\n"
-            "  \"prompts\": [\n"
-            "    \"first detailed prompt here\",\n"
-            "    \"second detailed prompt here\"\n"
-            "  ]\n"
-            "}"
+
+        logger.info('create_txt2img_prompt...')
+
+        parser = PydanticOutputParser(pydantic_object=ImagePrompts)
+        
+        base_prompt = PromptTemplate(
+            template="""Create two different prompts for image generation that illustrate this fact:
+                {viral_fact}
+
+                Requirements:
+                - Each prompt should be a single detailed sentence
+                - Prompts should be thematically related but visually distinct
+                - Include specific visual elements and composition details
+                - Maintain educational value while being visually engaging
+                - Consider lighting, mood, and perspective
+
+                OUTPUT JSON
+
+                {format_instructions}
+            """,
+            input_variables=["viral_fact"],
+            partial_variables={"format_instructions": parser.get_format_instructions()}
         )
         
-        # Use the LLM to generate two related prompts
-        prompt_result = llm.invoke(base_prompt)
+        # Generate prompts using the LLM
+        chain = base_prompt | llm | parser
+        prompt_result = chain.invoke({"viral_fact": state["viral_fact"]})
         
-        try:
-            # Parse the JSON from the LLM response
-            parsed_result = json.loads(prompt_result.content)
-            
-            # Validate the expected structure
-            if not isinstance(parsed_result, dict) or 'prompts' not in parsed_result:
-                raise ValueError("Invalid JSON structure: missing 'prompts' key")
-            
-            prompts = parsed_result['prompts']
-            if not isinstance(prompts, list) or len(prompts) != 2:
-                raise ValueError("Invalid prompts array: expected exactly 2 prompts")
-            
-            return {
-                **state,
-                "txt2img_prompts": prompts
-            }
-            
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Failed to parse LLM response as JSON: {e}")
-        except Exception as e:
-            raise ValueError(f"Error processing prompts: {e}")
+        return {
+            **state,
+            "txt2img_prompts": prompt_result.prompts
+        }
+
     
     def generate_image(state: Dict) -> WorkflowState:
         """Generate two images based on the refined text-to-image prompts"""
+
+        logger.info('generate_image...')
+
         thread_dir = f"../data/output/{state['thread_id']}"
         
         image_filepaths = []
@@ -162,6 +186,9 @@ def create_fact_workflow() -> Graph:
     
     def save_state(state: Dict) -> WorkflowState:
         """Save the final state as JSON"""
+
+        logger.info('save_state...')
+
         thread_dir = f"../data/output/{state['thread_id']}"
         
         # Save state as JSON
