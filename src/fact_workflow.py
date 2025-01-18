@@ -29,8 +29,11 @@ def create_fact_workflow() -> Graph:
     
     # Create LLM chain for prompt generation
     llm = ChatMistralAI(
-        model="mistral-small",  # or "mistral-small", "mistral-large" depending on your needs
-        temperature=0.7
+        model="mistral-medium",  # or "mistral-small", "mistral-large" depending on your needs
+        temperature=0.7,
+        response_format = {
+            "type": "json_object",
+        }
     )
     
     def process_topic(state: Dict) -> WorkflowState:
@@ -38,7 +41,6 @@ def create_fact_workflow() -> Graph:
         topic_result = topic_chain.invoke({'user_input': state['user_input']})
         return {
             **state,
-            "thread_id": str(uuid.uuid4()),  # Generate unique thread ID
             "topic": topic_result.topic,
             "is_random": topic_result.flag_random
         }
@@ -72,7 +74,7 @@ def create_fact_workflow() -> Graph:
         # Create a more structured and focused image prompt
         instructions = (
             "Create a single cohesive illustration that represents the following facts:\n"
-            f"{state['facts']}\n\n"
+            f"{state['viral_fact']}\n\n"
             "Art Direction:\n"
             "- Style: Modern digital art with a clean, educational approach\n"
             "- Colors: Rich, vibrant palette with good contrast\n"
@@ -96,7 +98,7 @@ def create_fact_workflow() -> Graph:
         """Generate two thematically related text-to-image prompts"""
         base_prompt = (
             "Create two different prompts for image generation that illustrate these facts:\n"
-            f"{state['facts'][:200]}...\n\n"
+            f"{state['viral_fact'][:200]}...\n\n"
             "Requirements:\n"
             "- Each prompt should be a single detailed sentence\n"
             "- Prompts should be thematically related but visually distinct\n"
@@ -220,18 +222,14 @@ if __name__ == "__main__":
         "memes"
     ]
     
+    from datetime import datetime
+    thread_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     for user_input in test_inputs:
         print(f"\nInput: {user_input}")
         result = workflow.invoke({
             "user_input": user_input,
-            "thread_id": "",  # Will be generated in process_topic
-            "topic": "",
-            "facts": "",
-            "is_random": False,
-            "audio_filepath": None,
+            "thread_id": thread_id,
         })
         print(f"Thread ID: {result['thread_id']}")
         print(f"Topic: {result['topic']} (Random: {result['is_random']})")
-        print("Facts:")
-        print(result['facts'])
-        print(f"Audio generated at: {result['audio_filepath']}")

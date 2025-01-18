@@ -28,6 +28,9 @@ def create_fact_chain():
         model="mistral-large-latest",
         temperature=0.7,
         max_tokens=1000,
+        response_format = {
+            "type": "json_object",
+        }
     )
     
     search = TavilySearchResults(api_key=os.getenv("TAVILY_API_KEY"))
@@ -45,8 +48,8 @@ def create_fact_chain():
         2. VIDEO DESCRIPTION:
         Write 2-3 sentences expanding on the fact with more context and details. Include one relevant URL from the search results if available.
         
-        IT SHOULD BE A VALID JSON!!!
-
+        The Output is a JSON!
+        
         {format_instructions}""")
     ])
     
