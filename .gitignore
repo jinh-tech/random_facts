@@ -23,6 +23,7 @@ wheels/
 # data
 *.wav
 output/
+FLUX*
 
 # Virtual Environment
 venv/
