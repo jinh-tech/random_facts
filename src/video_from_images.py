@@ -71,19 +71,15 @@ def ensure_video_length(images_path, duration_per_image_list, video_duration_sec
 #     cv2.destroyAllWindows()
 #     video.release()
 
-def video_from_images_moviepy(image_folder, video_folder, video_name, video_duration_sec):
+def video_from_images_moviepy(image_folder, video_file_path, video_duration_sec):
 
     images_path = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
     images_path = images_path[:MAX_IMAGES_IN_VIDEO]
 
     clips = []
     duration_per_image_list = [int(random.uniform(MIN_SEC_PER_IMAGE, MAX_SEC_PER_IMAGE)) for _ in images_path]
-    print(duration_per_image_list)
-    print(sum(duration_per_image_list))
     images_path, duration_per_image_list = ensure_video_length(images_path, duration_per_image_list, video_duration_sec)
 
-    print(duration_per_image_list)
-    print(sum(duration_per_image_list))
     for image, duration_per_image in zip(images_path, duration_per_image_list):
         image_path = os.path.join(image_folder, image)
         random_effect = random_moviepy_effect()
@@ -92,14 +88,12 @@ def video_from_images_moviepy(image_folder, video_folder, video_name, video_dura
         clips.append(clip)
 
     video = concatenate_videoclips(clips)
-    video_save_path = os.path.join(video_folder, video_name)
-    video.write_videofile(video_save_path, fps=30)
+    video.write_videofile(video_file_path, fps=30)
 
 if __name__ == "__main__":
 
     image_folder = '../data/images/test_images/'
-    video_folder = '../data/videos/test_videos/'
-    video_name = 'test_video_moviepy.mp4'
-    video_duration_sec = 15
+    video_file_path = '../data/videos/test_videos/test_video_moviepy.mp4'
+    video_duration_sec = 16
 
-    video_from_images_moviepy(image_folder, video_folder, video_name, video_duration_sec)
+    video_from_images_moviepy(image_folder, video_file_path, video_duration_sec)
