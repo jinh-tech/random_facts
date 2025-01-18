@@ -48,7 +48,8 @@ def create_fact_workflow() -> Graph:
         facts_result = facts_chain.invoke(state["topic"])
         return {
             **state,
-            "facts": facts_result.content
+            "viral_fact": facts_result.viral_fact,
+            "description": facts_result.description,
         }
     
     def generate_audio(state: Dict) -> WorkflowState:
@@ -59,7 +60,7 @@ def create_fact_workflow() -> Graph:
         
         # Generate audio with updated path
         updated_state = generate_audio_and_update_state(
-            text=state["facts"], 
+            text=state["viral_fact"], 
             state=state,
             output_filepath=f"{thread_dir}/output.wav"
         )
@@ -165,7 +166,8 @@ def create_fact_workflow() -> Graph:
         state_to_save = {
             "thread_id": state["thread_id"],
             "topic": state["topic"],
-            "facts": state["facts"],
+            "viral_fact": state["viral_fact"],
+            "description": state["description"],
             "is_random": state["is_random"],
             "audio_filepath": state["audio_filepath"],
             "audio_duration": state["audio_duration"],
@@ -215,7 +217,7 @@ if __name__ == "__main__":
     test_inputs = [
         # "Tell me about elephants",
         # "I don't know, surprise me",
-        "indonesia"
+        "memes"
     ]
     
     for user_input in test_inputs:
@@ -232,4 +234,4 @@ if __name__ == "__main__":
         print(f"Topic: {result['topic']} (Random: {result['is_random']})")
         print("Facts:")
         print(result['facts'])
-        print(f"Audio generated at: {result['audio_filepath']}") 
+        print(f"Audio generated at: {result['audio_filepath']}")
