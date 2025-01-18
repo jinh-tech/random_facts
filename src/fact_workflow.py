@@ -4,6 +4,8 @@ import json
 import os
 from langgraph.graph import Graph
 from langchain_core.messages import BaseMessage
+from langchain_core.prompts import PromptTemplate
+from langchain_mistralai import ChatMistralAI
 
 # Import our existing components
 from topic_handler import create_topic_chain, TopicOutput
@@ -24,6 +26,12 @@ def create_fact_workflow() -> Graph:
     topic_chain = create_topic_chain()
     facts_chain = create_fact_chain()
     image_chain = create_image_generation_chain()
+    
+    # Create LLM chain for prompt generation
+    llm = ChatMistralAI(
+        model="mistral-small",  # or "mistral-small", "mistral-large" depending on your needs
+        temperature=0.7
+    )
     
     def process_topic(state: Dict) -> WorkflowState:
         """Process the user input to determine the topic"""
@@ -84,44 +92,69 @@ def create_fact_workflow() -> Graph:
         }
     
     def create_txt2img_prompt(state: Dict) -> WorkflowState:
-        """Convert image instructions into a concise, focused text-to-image prompt"""
-        # Extract key information and create a more direct prompt
+        """Generate two thematically related text-to-image prompts"""
         base_prompt = (
-            "A single educational illustration showing "
-            f"{state['topic']}, "
-            "digital art style, vibrant colors, centered composition, "
-            "soft lighting, detailed main subject with simple background. "
-            "The scene should depict: "
-            f"{state['facts'][:200]}..."  # Truncate facts to avoid overwhelming the model
+            "Create two different prompts for image generation that illustrate these facts:\n"
+            f"{state['facts'][:200]}...\n\n"
+            "Requirements:\n"
+            "- Each prompt should be a single detailed sentence\n"
+            "- Prompts should be thematically related but visually distinct\n"
+            "- Include specific visual elements and composition details\n"
+            "- Maintain educational value while being visually engaging\n"
+            "- Consider lighting, mood, and perspective\n\n"
+            "Output the prompts in this exact JSON format:\n"
+            "{\n"
+            "  \"prompts\": [\n"
+            "    \"first detailed prompt here\",\n"
+            "    \"second detailed prompt here\"\n"
+            "  ]\n"
+            "}"
         )
         
-        # Add quality boosters and style modifiers
-        enhanced_prompt = (
-            f"{base_prompt} "
-            "trending on artstation, professional quality, "
-            "cohesive composition, educational illustration, "
-            "high detail, clean lines, perfect composition"
-        )
+        # Use the LLM to generate two related prompts
+        prompt_result = llm.invoke(base_prompt)
         
-        return {
-            **state,
-            "txt2img_prompt": enhanced_prompt
-        }
+        try:
+            # Parse the JSON from the LLM response
+            parsed_result = json.loads(prompt_result.content)
+            
+            # Validate the expected structure
+            if not isinstance(parsed_result, dict) or 'prompts' not in parsed_result:
+                raise ValueError("Invalid JSON structure: missing 'prompts' key")
+            
+            prompts = parsed_result['prompts']
+            if not isinstance(prompts, list) or len(prompts) != 2:
+                raise ValueError("Invalid prompts array: expected exactly 2 prompts")
+            
+            return {
+                **state,
+                "txt2img_prompts": prompts
+            }
+            
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse LLM response as JSON: {e}")
+        except Exception as e:
+            raise ValueError(f"Error processing prompts: {e}")
     
     def generate_image(state: Dict) -> WorkflowState:
-        """Generate an image based on the refined text-to-image prompt"""
+        """Generate two images based on the refined text-to-image prompts"""
         thread_dir = f"output/{state['thread_id']}"
-        output_filepath = f"{thread_dir}/image.png"
         
-        image_result = image_chain.invoke({
-            "prompt": state["txt2img_prompt"],  # Use the refined prompt instead of instructions
-            "aspect_ratio": "1:1",
-            "output_filepath": output_filepath
-        })
+        image_filepaths = []
+        for idx, prompt in enumerate(state["txt2img_prompts"]):
+            output_filepath = f"{thread_dir}/image_{idx + 1}.png"
+            
+            image_result = image_chain.invoke({
+                "prompt": prompt,
+                "aspect_ratio": "1:1",
+                "output_filepath": output_filepath
+            })
+            
+            image_filepaths.append(image_result["output_filepath"])
         
         return {
             **state,
-            "image_filepath": image_result["output_filepath"]
+            "image_filepaths": image_filepaths
         }
     
     def save_state(state: Dict) -> WorkflowState:
@@ -137,7 +170,8 @@ def create_fact_workflow() -> Graph:
             "audio_filepath": state["audio_filepath"],
             "audio_duration": state["audio_duration"],
             "synthesis_durations": state["synthesis_durations"],
-            "image_filepath": state["image_filepath"],
+            "txt2img_prompts": state["txt2img_prompts"],
+            "image_filepaths": state["image_filepaths"],
             "image_instructions": state["image_instructions"],
         }
         with open(f"{thread_dir}/result.json", "w") as f:

@@ -15,6 +15,9 @@ class ImageGenerationOutput(TypedDict):
     output_filepath: str
 
 def generate_image(input: ImageGenerationInput) -> ImageGenerationOutput:
+
+    print('generating image...')
+    
     url = "https://api.segmind.com/v1/fast-flux-schnell"
     
     data = {
