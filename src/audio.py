@@ -23,20 +23,22 @@ async def generate_audio_file(text_to_synthetize, output_filepth='output.wav'):
     )
     with open(output_filepth, 'wb') as f:
       f.write(synthesis['audio'])
+    return synthesis['duration']
 
 
 def generate_audio_file_sync(text_to_synthesize, output_filepath='output.wav'):
     """
     Wrapper to call the asynchronous `generate_audio_file` function synchronously.
+    Returns the duration of the generated audio in seconds.
     """
     async def wrapper():
-        await generate_audio_file(text_to_synthesize, output_filepath)
+        return await generate_audio_file(text_to_synthesize, output_filepath)
     
-    asyncio.run(wrapper())
+    return asyncio.run(wrapper())
 
 def generate_audio_and_update_state(text, state, output_filepath='output.wav'):
     """
-    Generates audio from text and updates the state dictionary with the audio file path.
+    Generates audio from text and updates the state dictionary with the audio file path and duration.
     
     Args:
         text (str): Text to synthesize into audio
@@ -44,15 +46,17 @@ def generate_audio_and_update_state(text, state, output_filepath='output.wav'):
         output_filepath (str): Path where the audio file will be saved
     
     Returns:
-        dict: Updated state dictionary
+        dict: Updated state dictionary with audio_filepath and duration
     """
     try:
-        generate_audio_file_sync(text, output_filepath)
+        duration = generate_audio_file_sync(text, output_filepath)
         state['audio_filepath'] = output_filepath
+        state['audio_duration'] = duration
         return state
     except Exception as e:
         print(f"Error generating audio: {str(e)}")
         state['audio_filepath'] = None
+        state['audio_duration'] = None
         return state
 
 if __name__ == '__main__':
