@@ -1,4 +1,7 @@
 from typing import Annotated, Dict, TypedDict
+import uuid
+import json
+import os
 from langgraph.graph import Graph
 from langchain_core.messages import BaseMessage
 
@@ -8,6 +11,7 @@ from langchain_facts import create_fact_chain
 from audio import generate_audio_and_update_state
 
 class WorkflowState(TypedDict):
+    thread_id: str
     topic: str
     facts: str
     is_random: bool
@@ -23,6 +27,7 @@ def create_fact_workflow() -> Graph:
         topic_result = topic_chain.invoke({'user_input': state['user_input']})
         return {
             **state,
+            "thread_id": str(uuid.uuid4()),  # Generate unique thread ID
             "topic": topic_result.topic,
             "is_random": topic_result.flag_random
         }
@@ -36,8 +41,30 @@ def create_fact_workflow() -> Graph:
         }
     
     def generate_audio(state: Dict) -> WorkflowState:
-        """Generate audio from the facts"""
-        return generate_audio_and_update_state(state["facts"], state)
+        """Generate audio from the facts and save results"""
+        # Create thread directory
+        thread_dir = f"output/{state['thread_id']}"
+        os.makedirs(thread_dir, exist_ok=True)
+        
+        # Generate audio with updated path
+        updated_state = generate_audio_and_update_state(
+            text=state["facts"], 
+            state=state,
+            output_filepath=f"{thread_dir}/output.wav"
+        )
+        
+        # Save state as JSON
+        state_to_save = {
+            "thread_id": state["thread_id"],
+            "topic": state["topic"],
+            "facts": state["facts"],
+            "is_random": state["is_random"],
+            "audio_filepath": updated_state["audio_filepath"]
+        }
+        with open(f"{thread_dir}/result.json", "w") as f:
+            json.dump(state_to_save, f, indent=2)
+            
+        return updated_state
     
     # Create the workflow graph
     workflow = Graph()
@@ -65,20 +92,22 @@ if __name__ == "__main__":
     
     # Test cases
     test_inputs = [
-        "Tell me about elephants",
+        # "Tell me about elephants",
         "I don't know, surprise me",
-        "platypus"
+        # "platypus"
     ]
     
     for user_input in test_inputs:
         print(f"\nInput: {user_input}")
         result = workflow.invoke({
             "user_input": user_input,
+            "thread_id": "",  # Will be generated in process_topic
             "topic": "",
             "facts": "",
             "is_random": False,
             "audio_filepath": None
         })
+        print(f"Thread ID: {result['thread_id']}")
         print(f"Topic: {result['topic']} (Random: {result['is_random']})")
         print("Facts:")
         print(result['facts'])
