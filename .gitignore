@@ -20,6 +20,9 @@ wheels/
 .installed.cfg
 *.egg
 
+# data
+*.wav
+
 # Virtual Environment
 venv/
 env/
