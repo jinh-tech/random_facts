@@ -37,7 +37,19 @@ streamlit run streamlit_app.py
 
 ## Technical Details
 
-![Technical Details diagram](mermaid-diagram-2025-01-19-132245.svg)
+```mermaid
+graph TD
+    A["User Input via Streamlit"] --> B["Query Tavily for Information"]
+    B --> C["Mistral: Generate JSON Output with Viral Fact and Video Description"]
+    C -->|"Fact (text)"| E["Generate txt2img Prompts with Mistral"]
+    E -->|"txt2img propmts (text)"| F["Generate Images with Segmind"] 
+    C -->|"Fact  (text)"| D["Convert Text to Audio with LMNT"]
+    C -->|"Video Description (text)"| I["Show Video in Streamlit Along with the Video Description from Above"]
+    F --> |"Images"| G["Create Video with MoviePy"]
+    D["Convert Text to Audio with LMNT"] --> |"Voice"|G
+    G --> |"Video"| H["Add Audio & Subtitles with MoviePy"]
+    H --> |"Video"| I["Show Video in Streamlit Along with the Video Description from Above"]
+```
 
 Here is a step-by-step overview of the technical workflow in our project:
 
