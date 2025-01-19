@@ -27,7 +27,7 @@ def create_fact_chain():
     mistral = ChatMistralAI(
         model="mistral-large-latest",
         temperature=0.7,
-        max_tokens=1000,
+        max_tokens=2000,
         response_format = {
             "type": "json_object",
         }
@@ -43,7 +43,7 @@ def create_fact_chain():
         Search results: {search_results}
         
         1. VIRAL FACT:
-        Create one short, engaging sentence (max 40 words) with a funny and ironic tone. Make it ready to read out loud (no bullet points or URLs).
+        Create one short, engaging sentence (150 to 200 words) with a funny and ironic tone. Make it ready to read out loud (no bullet points or URLs).
         
         2. VIDEO DESCRIPTION:
         Write 2-3 sentences expanding on the fact with more context and details. Include one relevant URL from the search results if available.

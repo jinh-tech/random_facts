@@ -20,5 +20,5 @@
 5. Text to speech
     * Use LMNT free api to generate audio
 
-6. Add audio to the video
+6. Add audio to the video and subtitles to video
     * Use information [here](https://stackoverflow.com/questions/56973205/how-to-combine-the-video-and-audio-files-in-ffmpeg-python)

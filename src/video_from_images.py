@@ -7,8 +7,8 @@ from moviepy.video.fx import SlideIn, SlideOut, FadeIn, FadeOut
 
 
 MAX_IMAGES_IN_VIDEO = 10
-MIN_SEC_PER_IMAGE = 1
-MAX_SEC_PER_IMAGE = 5
+MIN_SEC_PER_IMAGE = 2
+MAX_SEC_PER_IMAGE = 4
 MP4V_CODEC = cv2.VideoWriter_fourcc(*'mp4v')
 VIDEO_FPS = 30
 
@@ -18,13 +18,13 @@ ZOOM_SPEED = 0.06
 
 RANDOM_EFFECT_LIST = [
     [FadeIn(FADE_DURATION)],
-    [FadeOut(FADE_DURATION)],
-    [SlideIn(SLIDE_DURATION, 'left')],
-    [SlideOut(SLIDE_DURATION, 'left')],
-    [SlideIn(SLIDE_DURATION, 'right')],
-    [SlideOut(SLIDE_DURATION, 'right')],
+    # [FadeOut(FADE_DURATION)],
+    # [SlideIn(SLIDE_DURATION, 'left')],
+    # [SlideOut(SLIDE_DURATION, 'left')],
+    # [SlideIn(SLIDE_DURATION, 'right')],
+    # [SlideOut(SLIDE_DURATION, 'right')],
     [vfx.Resize(lambda t : 1+ZOOM_SPEED*t)],
-    [vfx.Resize(lambda t : 1-ZOOM_SPEED*t)],
+    # [vfx.Resize(lambda t : 1-ZOOM_SPEED*t)],
 ]
 
 RANDOM_EFFECT_DICT = {i: effect for i, effect in enumerate(RANDOM_EFFECT_LIST)}
