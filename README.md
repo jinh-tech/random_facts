@@ -34,13 +34,34 @@ streamlit run streamlit_app.py
 * A web app will open in your browser. Enter a topic and click on generate video.
 * A video along with some data will appear in the browser after 30 to 120 sec. Inisde the repo, a new folder with the name `data/output/{DateTime}_{Topic mentioned in prompt}` will be created. Inside this folder, the final video will have the name `video_with_audio_subtitles.mp4` and will be present alongside other intermediate data.
 
+
 ## Technical Details
 
-Below we mention the technical details about our project.
-1. The streamlit frontend takes input from the user.
-2. Using the topic and existing prompt, we query [Tavily](https://tavily.com/) to receive a fact(text) about the topic and a video description(text).
-3. We convert the fact(text) into audio using [LMNT](https://www.lmnt.com/).
-4. We use [Segmind](https://www.segmind.com/) to generate 2 images based on the fact that was generated earlier.
-5. Using [Moviepy](https://zulko.github.io/moviepy/), we stich the images into a short video with effects like ZoomIn and FadeIn.
-6. We combine the audio and add subtiles to the video created in the previous step by using [Moviepy](https://zulko.github.io/moviepy/) again.
+Here is a step-by-step overview of the technical workflow in our project:
+
+1. User Input via Streamlit  
+   The Streamlit frontend accepts input from the user, specifying the topic.
+
+2. Information Retrieval with Tavily  
+   Based on the provided topic, we query [Tavily](https://tavily.com/) to retrieve relevant information.
+
+3. Output Generation with Mistral  
+   We call Mistral, which generates a JSON output containing two elements:  
+   - Fact (text): A textual fact about the topic.  
+   - Video Description (text): A description for the video.
+
+4. Text-to-Audio Conversion with LMNT  
+   The fact text is converted into an audio voiceover using [LMNT](https://www.lmnt.com/).
+
+5. Dynamic Prompt Creation by Mistral  
+   Mistral dynamically generates text-to-image (txt2img) prompts based on the fact text, which will be displayed in the video.
+
+6. Image Generation with Segmind  
+   Using the txt2img prompts, we generate two images with [Segmind](https://www.segmind.com/).
+
+7. Video Creation with MoviePy  
+   The generated images are stitched into a short video using [MoviePy](https://zulko.github.io/moviepy/), with visual effects such as ZoomIn and FadeIn.
+
+8. Final Video Enhancements  
+   The audio voiceover is combined with the video, and subtitles are added using [MoviePy](https://zulko.github.io/moviepy/) once again.
 
