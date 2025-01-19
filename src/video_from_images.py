@@ -73,6 +73,8 @@ def ensure_video_length(images_path, duration_per_image_list, video_duration_sec
 
 def video_from_images_moviepy(image_folder, video_file_path, video_duration_sec):
 
+    print('video_from_images_moviepy...')
+
     images_path = [img for img in os.listdir(image_folder) if img.endswith(".png")]
     images_path = images_path[:MAX_IMAGES_IN_VIDEO]
 

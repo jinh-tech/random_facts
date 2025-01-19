@@ -2,7 +2,9 @@ from moviepy import VideoFileClip, AudioFileClip, TextClip, CompositeVideoClip
 from moviepy.video.tools.subtitles import SubtitlesClip
 import json
 
-FONT = "../quattrocentosans-regular-webfont.ttf"
+from src import PROJECT_ROOT
+
+FONT = f"{PROJECT_ROOT}/quattrocentosans-regular-webfont.ttf"
 
 def join_video_with_audio(video_file_path, audio_file_path, output_file_path):
 
