@@ -1,7 +1,7 @@
 import streamlit as st
-from fact_workflow import create_fact_workflow
-from video_from_images import video_from_images_moviepy
-from audio_subtitles import join_video_with_audio, add_subtitle_to_video
+from src.fact_workflow import create_fact_workflow
+from src.video_from_images import video_from_images_moviepy
+from src.audio_subtitles import join_video_with_audio, add_subtitle_to_video
 import json
 from datetime import datetime
 from src import DATA_DIR

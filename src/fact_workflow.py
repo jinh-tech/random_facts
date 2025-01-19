@@ -10,10 +10,10 @@ from pydantic import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
 
 # Import our existing components
-from topic_handler import create_topic_chain, TopicOutput
-from langchain_facts import create_fact_chain
-from audio import generate_audio_and_update_state
-from get_images import create_image_generation_chain
+from src.topic_handler import create_topic_chain, TopicOutput
+from src.langchain_facts import create_fact_chain
+from src.audio import generate_audio_and_update_state
+from src.get_images import create_image_generation_chain
 from loguru import logger
 
 from src import OUTPUT_DIR
