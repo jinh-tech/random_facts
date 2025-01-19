@@ -43,11 +43,7 @@ def create_fact_chain():
         Search results: {search_results}
         
         1. VIRAL FACT:
-<<<<<<< HEAD
-        Create one short, engaging sentence (150 to 200 words) with a funny and ironic tone. Make it ready to read out loud (no bullet points or URLs).
-=======
         Create one short, engaging sentence (80-100 words) with a funny and ironic tone. Make it ready to read out loud (no bullet points or URLs).
->>>>>>> origin/streamlit
         
         2. VIDEO DESCRIPTION:
         Write 2-3 sentences expanding on the fact with more context and details. Include one relevant URL from the search results if available.

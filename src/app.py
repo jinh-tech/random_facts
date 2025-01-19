@@ -3,38 +3,17 @@ from fact_workflow import create_fact_workflow
 from video_from_images import video_from_images_moviepy
 from audio_subtitles import join_video_with_audio, add_subtitle_to_video
 import json
-<<<<<<< HEAD
-
-workflow = create_fact_workflow()
-    
-test_input = "afd party"
-
-=======
->>>>>>> origin/streamlit
 from datetime import datetime
 
 st.title("Historical Facts Video Generator")
 st.write("Enter a historical topic to generate a video about it!")
 
-<<<<<<< HEAD
-# thread_id = '20250118_184338_pepsi war fleet'
-output_folder = f"../data/output/{thread_id}"
-video_file_path = output_folder + "/video.mp4"
-audio_file_path = output_folder + "/output.wav"
-video_with_audio_path = output_folder + '/video_with_audio.mp4'
-subtitle_file_path = output_folder + '/result.json'
-video_with_audio_subtitle_path = output_folder + '/video_with_audio_subtitle.mp4'
-
-with open(output_folder + '/result.json') as file:
-    video_duration_sec = int(json.load(file)["audio_duration"] + 1)
-=======
 # Initialize the workflow
 @st.cache_resource
 def get_workflow():
     return create_fact_workflow()
 
 workflow = get_workflow()
->>>>>>> origin/streamlit
 
 # Create input field
 user_input = st.text_input("Enter a historical topic:", "pepsi vs coca cola war")
