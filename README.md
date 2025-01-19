@@ -79,3 +79,6 @@ Here is a step-by-step overview of the technical workflow in our project:
 8. Final Video Enhancements  
    The audio voiceover is combined with the video, and subtitles are added using [MoviePy](https://zulko.github.io/moviepy/) once again.
 
+## Sample Video
+
+[Sample Video](sample_video.mp4)
