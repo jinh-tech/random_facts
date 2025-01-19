@@ -37,6 +37,8 @@ streamlit run streamlit_app.py
 
 ## Technical Details
 
+![Technical Details diagram](mermaid-diagram-2025-01-19-132245.svg)
+
 Here is a step-by-step overview of the technical workflow in our project:
 
 1. User Input via Streamlit  
